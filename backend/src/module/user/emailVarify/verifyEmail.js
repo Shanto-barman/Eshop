@@ -3,7 +3,13 @@ import 'dotenv/config'
 
 
 export const verifyEmail = (token, email)=>{
-    
+console.log("verifyEmail called with:", email);  
+
+if (!email) {
+    console.error(" Email not provided to verifyEmail()");
+    return; 
+  }
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -26,13 +32,15 @@ const mailConfigurations = {
            Thanks`
 };
 
-transporter.sendMail(mailConfigurations, function(error, info){
-    if (error) throw Error(error);
-    console.log('Email Sent Successfully');
-    console.log(info);
-});
-
-}
+ transporter.sendMail(mailConfigurations, function (error, info) {
+    if (error) {
+      console.error(" Email sending failed:", error.message);
+    } else {
+      console.log(" Email sent successfully to:", email);
+      console.log("Response:", info.response);
+    }
+  });
+};
 
 
 

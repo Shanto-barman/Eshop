@@ -1,5 +1,5 @@
 import express from 'express'
-import { register, reVerify, verify } from '../controllers/userController.js'
+import { login, register, reVerify, verify } from '../controllers/userController.js'
 
 
 
@@ -11,5 +11,7 @@ const router = express.Router()
 router.post('/register', register)
 router.post('/verify', verify)
 router.post('/reverify',reVerify)
+router.post('/login',login)
+// router.post('/logout',logout)
 
-export default router;
+export default router
