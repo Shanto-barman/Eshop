@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
 import { verifyEmail } from "../emailVarify/verifyEmail.js";
 import  {Session } from "../model/sessionModel.js";
+import { sendOTPMail } from "../emailVarify/sendOTPMail.js";
 
 export const register = async(req, res)=>{
     try {
