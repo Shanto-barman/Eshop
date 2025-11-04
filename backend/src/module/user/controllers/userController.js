@@ -2,16 +2,17 @@ import { User } from "../model/userModel.js";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
 import { verifyEmail } from "../emailVarify/verifyEmail.js";
-import { Session } from "../model/sessionModel.js";
+import  {Session } from "../model/sessionModel.js";
 
 export const register = async(req, res)=>{
     try {
         const {firstName, lastName, email,password}= req.body;
-        if(!firstName || !lastName || !email || !password)
-          return res.status(400).json({
+        if(!firstName || !lastName || !email || !password){
+              return res.status(400).json({
                 success:false,
                 massage:'all fields are required'
-        })
+            })
+        }
         
         const user = await User.findOne({email})
         if(user){
@@ -55,7 +56,7 @@ export const register = async(req, res)=>{
 export const verify = async(req, res)=>{
     try{
         const authHeader = req.headers.authorization
-        if(!authHeader || !authHeader.Startswith("Bearer")){
+        if(!authHeader || !authHeader.startsWith("Bearer")){
            return res.status(400).json({
                 success:false,
                 message:'Authorization token is missing or invalid'
@@ -84,9 +85,12 @@ export const verify = async(req, res)=>{
                 message:'User not found'
             })
         }
+        user.token = null
+        user.isVerified = true;///
+        await user.save();
           return res.status(200).json({     ///true
             success: true,
-            message: "User verified successfully",
+            message: "Email verified successfully",
             user
         });
     }catch(error){
@@ -168,7 +172,7 @@ export const login = async(req, res)=>{
         }
 
         await Session.create({userId:existstingUser._id})
-        return res.status(200)({
+        return res.status(200).json({
             success:true,
             message:`welcome back ${existstingUser.firstName}`,
             user:existstingUser,
@@ -184,13 +188,51 @@ export const login = async(req, res)=>{
 }
 
 
-// export const logout = async(req, res)=>{
-//     try{
-//         const userId =req.id
-//     }catch(error){
-//         return res.status(500)({
-//             success:false,
-//             message:error.message
-//         })
-//     }
-// }
+export const logout = async(req, res)=>{
+    try{
+        const userId =req.id
+        console.log("UserId:", userId)
+        await Session.deleteMany({userId:userId})
+        await User.findByIdAndUpdate(userId, {isLoggedIn:false} )
+        return res.status(200).json({
+            success:true,
+            message:'User logout  successfull'
+        })
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+
+export const forgotPassword = async(req, res)=>{
+    try{
+        const {email} = req.body;
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(400).json({
+                success:false,
+                message:"User not found"
+            })
+        }
+        const otp = Math.floor(100000 + Math.random()*900000).toString()
+        const otpExpiry = new Date(Date.now()+10*60*1000)//10 mins
+        user.otp = otp
+        user.otpExpiry =otpExpiry
+
+        await user.save()
+        await sendOTPMail(otp, email)
+
+        return res.status(200).json({
+            success:true,
+            message:'Otp sent to emali successfully'
+        })
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
