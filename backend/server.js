@@ -1,6 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
-import connectDB from './database/db.js'
+import connectDB from './src/config/database/db.js'
 import userRoute from './src/module/user/routes/userRoute.js'
 
 const app = express()

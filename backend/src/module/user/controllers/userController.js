@@ -43,7 +43,7 @@ export const register = async(req, res)=>{
             user:newUser
         })
     }catch(error){
-        res.status(500).json({
+       return res.status(500).json({
         success:false,
         message:error.message
     })
@@ -161,8 +161,9 @@ export const login = async(req, res)=>{
             })
         }
         //generate token
-        const accesToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
+         const accesToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
         const refreshToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
+       
 
         existstingUser.isLoggedIn = true
         await existstingUser.save()
@@ -250,7 +251,7 @@ export const verifyOTP = async(req, res)=>{
                 message:"otp is required"
             })
         }
-        const usr = await User.findOne({email})
+        const user = await User.findOne({email})
         if(!user){
             return res.status(400).json({
                 success:false,
@@ -269,7 +270,7 @@ export const verifyOTP = async(req, res)=>{
                 message:"otp has expird please request a new one"
             })
         }
-        if(otp !== user.otp){
+        if(String(otp) !== String(user.otp)){
             return res.status(400).json({
                 success:false,
                 message:'otp is invalid'
@@ -281,6 +282,64 @@ export const verifyOTP = async(req, res)=>{
         return res.status(200).json({
             success:true,
             message:'otp verified successfully'
+        })
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+
+export const changePassword = async(req, res)=>{
+    try{
+        const {newPassword, confirmPassword}= req.body;
+        const {email}= req.params
+
+        const user = await User.findOne({email})
+        if(!user){
+            return res.status(404).json({
+                success:false,
+                message:'User not found',
+            })
+        }
+        if(!newPassword || !confirmPassword){
+            return res.status(400).json({
+                success:false,
+                message:"all fields are required",
+            })
+        }
+        if(newPassword !== confirmPassword){
+            return res.status(400).json({
+                success:false,
+                message:"password do not match",
+            })
+        }
+        const hashedPassword =await bcrypt.hash(newPassword, 10)
+        user.password = hashedPassword
+        await user.save()
+
+        return res.status(200).json({
+            success:true,
+            message:"password changesd successfully",
+        })
+    }catch(error){
+    
+         return res.status(500).json({
+            success:false,
+            message:error.message,
+        })
+    }
+}
+
+
+export const allUser = async(_, res)=>{
+    try{
+        const users = await User.find()
+        return res.status(200).json({
+            success:true,
+            users
         })
     }catch(error){
         return res.status(500).json({
