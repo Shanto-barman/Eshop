@@ -161,7 +161,7 @@ export const login = async(req, res)=>{
             })
         }
         //generate token
-         const accesToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
+        const accessToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2h'})
         const refreshToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
        
 
@@ -179,7 +179,7 @@ export const login = async(req, res)=>{
             success:true,
             message:`welcome back ${existstingUser.firstName}`,
             user:existstingUser,
-            accesToken,
+            accessToken,
             refreshToken
         })
     }catch(error){
@@ -340,6 +340,28 @@ export const allUser = async(_, res)=>{
         return res.status(200).json({
             success:true,
             users
+        })
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+export const getUserBuId = async(req, res)=>{
+    try{
+        const {userId} = req.parems;
+        const user = await User.findById(userId).select("-password -otp - otpExpiry - token")
+        if(!user){
+            return res.status(404).json({
+                success:false,
+                message:"User not found"
+            })
+        }
+        res.status(200)({
+            success:true,
+            user
         })
     }catch(error){
         return res.status(500).json({

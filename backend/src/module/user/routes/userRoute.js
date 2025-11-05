@@ -1,5 +1,5 @@
 import express from 'express'
-import { allUser, changePassword, forgotPassword, login, logout, register, reVerify, verify, verifyOTP } from '../controllers/userController.js'
+import { allUser, changePassword, forgotPassword, getUserBuId, login, logout, register, reVerify, verify, verifyOTP } from '../controllers/userController.js'
 import { isAdmin, isAuthenticated } from '../../../middleware/isAuthenticated.js'
 
 
@@ -16,5 +16,5 @@ router.post('/forgot-password', forgotPassword)
 router.post('/verify-otp/:email', verifyOTP)
 router.post('/change-password/:email', changePassword);
 router.get('/all-user',isAuthenticated, isAdmin, allUser)
-
+router.get('/get-user/:userId', getUserBuId)
 export default router
