@@ -1,5 +1,12 @@
-import { render } from 'preact'
+import React, { StrictMode } from 'react'
+import {createRoot} from 'react-dom/client'
 import './index.css'
 import  App  from './app.jsx'
+import { Toaster } from 'sonner'
 
-render(<App />, document.getElementById('app'))
+createRoot(document.getElementById('root')).render(
+    <StrictMode>
+       <App/>
+       <Toaster/>
+    </StrictMode>
+)
