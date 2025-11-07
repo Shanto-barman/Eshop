@@ -5,48 +5,45 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Verify from "./pages/Verify";
 import VerifyEmail from "./pages/VerifyEmail";
+import Footer from "./components/Footer";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      <>
-        <Navbar />
-        <Home />
-      </>
-    ),
+    element: <><Navbar/><Home/><Footer/></>
+   
   },
   {
     path: "/Signup",
-    element: (
+    element: 
       <>
         <Signup />
       </>
-    ),
+    
   },
   {
     path: "/login",
-    element: (
+    element: 
       <>
         <Login />
       </>
-    ),
+    
   },
   {
     path: "/Verify",
-    element: (
+    element: 
       <>
         <Verify />
       </>
-    ),
+    
   },
   {
     path: "/Verify/:token",
-    element: (
+    element: 
       <>
         <VerifyEmail />
       </>
-    ),
+   
   },
 ]);
 
