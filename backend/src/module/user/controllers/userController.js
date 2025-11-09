@@ -8,7 +8,7 @@ import { sendOTPMail } from "../emailVarify/sendOTPMail.js";
 
 export const register = async(req, res)=>{
     try {
-        const {firstName, lastName, email,password}= req.body;
+        const {firstName, lastName, email, password}= req.body;
         if(!firstName || !lastName || !email || !password){
               return res.status(400).json({
                 success:false,
@@ -140,45 +140,45 @@ export const login = async(req, res)=>{
                 message:'all fields are required'
             })
         }
-        const existstingUser = await User.findOne({email})
-        if((!existstingUser)){
+        const existingUser = await User.findOne({email})
+        if((!existingUser)){
             return res.status(400).json({
                 success:false,
                 message:"User not exists"
             })
         }
-        const isPasswordValid = await bcrypt.compare(password,existstingUser.password)
+        const isPasswordValid = await bcrypt.compare(password,existingUser.password)
         if(!isPasswordValid){
             return res.status(400).json({
                 success:false,
                 message:"Invalid Creadentials"
             })
         }
-        if(existstingUser.isVerified === false){
+        if(existingUser.isVerified === false){
             return res.status(400).json({
                 success:false,
                 message:"Verify your accout than login"
             })
         }
         //generate token
-        const accessToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2h'})
-        const refreshToken = jwt.sign({id:existstingUser._id},process.env.SECRET_KEY,{expiresIn:'2d'})
+        const accessToken = jwt.sign({id:existingUser._id},process.env.SECRET_KEY,{expiresIn:'2h'})
+        const refreshToken = jwt.sign({id:existingUser._id},process.env.SECRET_KEY,{expiresIn:'7d'})
        
 
-        existstingUser.isLoggedIn = true
-        await existstingUser.save()
+        existingUser.isLoggedIn = true
+        await existingUser.save()
 
 
-        const existingSession = await Session.findOne({userId:existstingUser._id})
+        const existingSession = await Session.findOne({userId:existingUser._id})
         if(existingSession){
-            await Session.deleteOne({userId:existstingUser._id})
+            await Session.deleteOne({userId:existingUser._id})
         }
 
-        await Session.create({userId:existstingUser._id})
+        await Session.create({userId:existingUser._id})
         return res.status(200).json({
             success:true,
-            message:`welcome back ${existstingUser.firstName}`,
-            user:existstingUser,
+            message:`welcome back ${existingUser.firstName}`,
+            user:existingUser,
             accessToken,
             refreshToken
         })
