@@ -1,9 +1,29 @@
-import { ShoppingCart } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ShoppingCart } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from "./ui/button";
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
-  const user = true;
+  const {user} = useSelector(store=>store.user)
+  const accessToken = localStorage.getItem('accessToken')
+  
+  const logoutHandler = async()=>{
+    try {
+      const res =await axios.post('http://localhost:8000/api/v1/user/logout',{},{
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      })
+      if(res.data.success){
+        toast.success(res.data.message)
+      }
+    }catch(error){
+      console.log(error)
+    }
+  }
   return (
     <header className="bg-pink-50 fixed w-full z-20 border-b border-pink-200 justify-between">
       <div className="max-w-7xl mx-auto flex justify-between items-center py-3 ">
@@ -20,7 +40,7 @@ const Navbar = () => {
             </Link>
             {user && (
               <Link to={"/profile"}>
-                <li>Hello User</li>
+                <li>Hello {user.firstName}</li>
               </Link>
             )}
           </ul>

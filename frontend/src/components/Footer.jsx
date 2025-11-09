@@ -7,7 +7,7 @@ const Footer=()=> {
         <div className='max-w-7xl mx-auto px-4 md:flex md:justify-between'>
             <div className='mn-6 md:mb-0'>
                 <Link to='/'>
-                <img src="/Ecart.png" alt=""  className=''/>
+                <img src="/Ecard.png" alt="" className="w-[80px]"/>
                 </Link>
                 <p className='mt-2 text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                 <p className='mt-2 text-sm'>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
@@ -40,17 +40,16 @@ const Footer=()=> {
                 <input 
                 type='email'
                 placeholder='Your email address'
-                className='w-full p-2 rounded-l-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500'
+                className='w-full p-2 rounded-l-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-white' 
                 />
                 <button type='submit' className='bg-pink-600 text-white px-4 rounded-r-md hover:bg-red-700'>Subscribe</button>
             </form>
             </div>
 
-           
-            <div className='mt-8 border-t border-gray-700 pt-6 text-center text-sm'>
+        </div>
+          <div className='mt-8 border-t border-gray-700 pt-6 text-center text-sm'>
             <p>&copy; {new Date().getFullYear()} <span className='text-pink-600'>Eshop</span>. All rights reserved</p>
             </div>
-        </div>
     </footer>
   )
 }

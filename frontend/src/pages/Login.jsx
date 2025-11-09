@@ -15,6 +15,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/userSlice";
 
 const Login = ()=> {
    const [showPassword, setShowPassword] = useState(false)
@@ -24,6 +26,7 @@ const Login = ()=> {
         password:"",
     })
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleChange =(e)=>{
         const {name, value}=e.target;
@@ -37,13 +40,14 @@ const Login = ()=> {
         console.log(formData)
         try{
           setLoading(true)
-            const res = await axios.post(`http://localhost:8000/api/v1/user/login`,formData,{
+            const res = await axios.post(`http://localhost:8000/api/v1/user/login`, formData,{
                 headers:{
                     "content-Type":"application/json"
                 }
             })
             if(res.data.success){
                 navigate('/')
+                dispatch(setUser(res.data.user))
                 toast.success(res.data.message)
             }
         }catch(error){
