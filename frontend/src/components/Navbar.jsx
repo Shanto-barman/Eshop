@@ -1,14 +1,17 @@
 import { ShoppingCart } from 'lucide-react';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "./ui/button";
 import axios from 'axios';
 import { toast } from 'sonner';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '@/redux/userSlice';
 
 const Navbar = () => {
   const {user} = useSelector(store=>store.user)
   const accessToken = localStorage.getItem('accessToken')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   
   const logoutHandler = async()=>{
     try {
@@ -18,6 +21,7 @@ const Navbar = () => {
         }
       })
       if(res.data.success){
+        dispatch(setUser(null))
         toast.success(res.data.message)
       }
     }catch(error){
@@ -51,11 +55,11 @@ const Navbar = () => {
             </span>
           </Link>
           {user ? (
-            <Button className="bg-pink-600 text-white cursor-pointer hover:border-pink-600 border-1">
+            <Button onClick={logoutHandler} className="bg-pink-600 text-white cursor-pointer hover:border-pink-600 border-1">
               Logout
             </Button>
           ) : (
-            <Button className="bg-gradient-to-tl from-blue-600 to-purple-600 text-white cursor-pointer">
+            <Button onClick={()=>navigate('/login')} className="bg-gradient-to-tl from-blue-600 to-purple-600 text-white cursor-pointer">
               Login
             </Button>
           )}
