@@ -8,7 +8,7 @@ export const addProduct = async(req, res)=>{
          console.log("BODY =>", req.body);
             console.log("FILES =>", req.files);
         const {productName, productDesc, productPrice, category, brand} = req.body;
-        // const userId = req.id;
+        const userId = req.id;
 
         if(!productName || !productDesc || !productPrice || !category || !brand){
             return res.status(400).json({
@@ -41,7 +41,7 @@ export const addProduct = async(req, res)=>{
         }
         //create a product in DB
         const newProduct = await Product.create({
-            // userId,
+            userId,
             productName,
             productDesc,
             productPrice,
