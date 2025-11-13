@@ -1,25 +1,36 @@
-import cloudinary from "../../../../utils/cloudinary";
-import getDataUri from "../../../../utils/dataUri";
-import { Product } from "../model/productModel";
+import cloudinary from "../../../../utils/cloudinary.js";
+import getDataUri from "../../../../utils/dataUri.js";
+import { Product } from "../model/productModel.js";
 
 export const addProduct = async(req, res)=>{
+   
     try{
-        const {productName, productDasc, category, brand} = req.body;
-        const userId = req.id;
+         console.log("BODY =>", req.body);
+            console.log("FILES =>", req.files);
+        const {productName, productDesc, productPrice, category, brand} = req.body;
+        // const userId = req.id;
 
-        if(!productName || !productDasc || !category || !brand){
+        if(!productName || !productDesc || !productPrice || !category || !brand){
             return res.status(400).json({
                 success:false,
                 message:"all fields are required"
             })
         }
+        //c
+        if (!req.files || req.files.length === 0) {
+        return res.status(400).json({
+            success: false,
+            message: "At least one image is required"
+        });
+        }
+    //c
         //Handle multiple image uploads
-        let productImg = []
-        if(req.file && req.file.length > 0){
+        let productImg = [];
+        if(req.files && req.files.length > 0){
             for(let file of req.files){
                 const fileUri = getDataUri(file)
                 const result = await cloudinary.uploader.upload(fileUri,{
-                    folder:"mern_products" //cloudinary folder name
+                    folder:"mern_products" //cloudinary folder name 
 
                 });
                 productImg.push({
@@ -30,13 +41,13 @@ export const addProduct = async(req, res)=>{
         }
         //create a product in DB
         const newProduct = await Product.create({
-            userId,
+            // userId,
             productName,
             productDesc,
             productPrice,
             category,
             brand,
-            productImg
+            productImg,
         })
         return res.status(200).json({
             success:true,
@@ -52,10 +63,10 @@ export const addProduct = async(req, res)=>{
     }
 }
 
-export const getAllProduct = async(__dirname, res)=>{
+export const getAllProduct = async(_, res)=>{
     try{
         const products = await Product.find()
-        if(!products){
+        if (!products ){
             return res.status(404).json({
                 success:false,
                 message:"No product available",
@@ -73,3 +84,4 @@ export const getAllProduct = async(__dirname, res)=>{
         })
     }
 }
+

@@ -375,10 +375,10 @@ export const getUserBuId = async(req, res)=>{
 export const updateUser = async(req, res)=>{
     try{
         const userIdToUpdate = req.params.id 
-        const isLoggedInUser = req.user
+        const loggedInUser = req.user
         const {firstName, lastName, address, city, zipCode, phoneNo, role} =req.body
 
-        if(isLoggedInUser._id.toString()  !== userIdToUpdate && isLoggedInUser.role !== 'admin'){
+        if(loggedInUser._id.toString()  !== userIdToUpdate && loggedInUser.role !== 'admin'){
             return res.status(403).json({
                 success:false,
                 message:"You are not allwoed to update this profile"
