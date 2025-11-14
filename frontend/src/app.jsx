@@ -7,50 +7,68 @@ import Verify from "./pages/Verify";
 import VerifyEmail from "./pages/VerifyEmail";
 import Footer from "./components/Footer";
 import Profile from "./pages/profile";
+import Products from "./pages/Products";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <><Navbar/><Home/><Footer/></>
-   
+    element: (
+      <>
+        <Navbar />
+        <Home />
+        <Footer />
+      </>
+    ),
   },
   {
     path: "/Signup",
-    element: 
+    element: (
       <>
         <Signup />
       </>
-    
+    ),
   },
   {
     path: "/login",
-    element: 
+    element: (
       <>
         <Login />
       </>
-    
+    ),
   },
   {
     path: "/Verify",
-    element: 
+    element: (
       <>
         <Verify />
       </>
-    
+    ),
   },
   {
     path: "/Verify/:token",
-    element: 
+    element: (
       <>
         <VerifyEmail />
       </>
-   
+    ),
   },
-    {
+  {
     path: "/Profile/:userId",
-    element: 
-      <><Navbar/><Profile/></>
-   
+    element: (
+      <>
+        <Navbar />
+        <Profile />
+      </>
+    ),
+  },
+  {
+    path: "/Products",
+    element: (
+      <>
+        <Navbar />
+        <Products />
+      </>
+    ),
   },
 ]);
 
