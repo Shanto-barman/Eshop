@@ -5,7 +5,7 @@ import { verifyEmail } from "../emailVarify/verifyEmail.js";
 import  {Session } from "../model/sessionModel.js";
 import { sendOTPMail } from "../emailVarify/sendOTPMail.js";
 import cloudinary from "../../../../utils/cloudinary.js";
-
+import {SECRET_KEY,ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN} from "../../../config/database/envConfig"
 
 export const register = async(req, res)=>{
     try {
@@ -33,7 +33,11 @@ export const register = async(req, res)=>{
         })
 
 
-        const token = jwt.sign({id:newUser._id}, process.env.SECRET_KEY, {expiresIn:'2h'})
+        const token = jwt.sign(
+            {id:newUser._id},
+            process.env.SECRET_KEY, 
+            {expiresIn: ACCESS_TOKEN_EXPIRES_IN})
+            
         verifyEmail(token, email)//send email here
         newUser.token = token
         await newUser.save()
@@ -115,7 +119,8 @@ export const reVerify = async(req, res)=>{
             })
             
         }
-        const token = jwt.sign({id:user._id}, process.env.SECRET_KEY, {expiresIn:'2h'})
+        const token = jwt.sign({id:user._id}, process.env.SECRET_KEY, {expiresIn:ACCESS_TOKEN_EXPIRES_IN})
+        // '2h'
         verifyEmail(token, email)//send email here
         user.token = token
         await user.save()
@@ -161,10 +166,18 @@ export const login = async(req, res)=>{
                 message:"Verify your accout than login"
             })
         }
-        //generate token
-        const accessToken = jwt.sign({id:existingUser._id},process.env.SECRET_KEY,{expiresIn:'2h'})
-        const refreshToken = jwt.sign({id:existingUser._id},process.env.SECRET_KEY,{expiresIn:'7d'})
-       
+        // generate token
+       const accessToken = jwt.sign(
+        {id: existingUser._id},
+        SECRET_KEY,
+        {expiresIn: ACCESS_TOKEN_EXPIRES_IN}
+    );
+
+       const refreshToken = jwt.sign(
+        {id: existingUser._id},
+        SECRET_KEY,
+        {expiresIn: REFRESH_TOKEN_EXPIRES_IN}
+    )
 
         existingUser.isLoggedIn = true
         await existingUser.save()
