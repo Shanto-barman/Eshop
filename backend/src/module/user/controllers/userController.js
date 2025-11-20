@@ -5,7 +5,7 @@ import { verifyEmail } from "../emailVarify/verifyEmail.js";
 import  {Session } from "../model/sessionModel.js";
 import { sendOTPMail } from "../emailVarify/sendOTPMail.js";
 import cloudinary from "../../../../utils/cloudinary.js";
-import {SECRET_KEY,ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN} from "../../../config/database/envConfig"
+import {SECRET_KEY,ACCESS_TOKEN_EXPIRES_IN, REFRESH_TOKEN_EXPIRES_IN} from "../../../config/database/envConfig.js"
 
 export const register = async(req, res)=>{
     try {

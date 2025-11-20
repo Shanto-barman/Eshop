@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import 'dotenv/config'
+import 'dotenv/config.js'
 
 
 export const verifyEmail = (token, email)=>{
