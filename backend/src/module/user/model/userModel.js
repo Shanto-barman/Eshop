@@ -6,8 +6,11 @@ const userSchema = new mongoose.Schema({
     lastName:{type:String,requird:true},
     profilePic:{type:String,default:""},//Cloduinary image url
     profilePicPublicId:{type:String,default:""},//Cloudinary public_id for deletion
+    Username:{type:String},//
     email:{type:String, require:true, unique:true},
-    password:{type:String, require:true},
+    password:{type:String},
+    googleId:{type:String},
+    avatar:{type:String},
     role:{
         type:String,
         enum:["user", "admin"],

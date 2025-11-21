@@ -1,14 +1,37 @@
-import {strategy as GoogleStrategy} from "passport-google-oauth20"
-import passport from "passport";
+import {Strategy as GoogleStrategy} from "passport-google-oauth20";
+// import pkg from "passport-google-oauth20";
+// const { Strategy: GoogleStrategy } = pkg;
 
-passport.use(new GoogleStrategy({
+import passport from "passport";
+import { User } from "../module/user/model/userModel.js";
+
+passport.use(
+    new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://www.example.com/auth/google/callback"
+    callbackURL: "http://localhost:8000/auth/google/callback"
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
+  async(accessToken, refreshToken, profile, cb)=> {
+    console.log(profile)
+    try{
+       let user =await User.findOne({ googleId: profile.id } );
+
+       if(!user){
+         user = await User.create({
+            googleId:profile.id,
+            username:profile.displayName,
+            email:profile.emails[0].value,
+            avatar:profile.photos[0].value,
+            isLoggedIn:true,
+            isVerified:true
+        })
+       }
+
+       return cb(null, user);
+
+    }catch(error){
+       return cb(error, null)
+    }
+    
   }
 ));
