@@ -9,6 +9,8 @@ import Footer from "./components/Footer";
 import Profile from "./pages/profile";
 import Products from "./pages/Products";
 import Cart from "./pages/cart";
+import AuthSuccess from "./pages/AuthSuccess";
+// import { UserProvider } from "./context/userContext";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +36,14 @@ const router = createBrowserRouter([
     element: (
       <>
         <Login />
+      </>
+    ),
+  },
+  {
+    path: "/auth-success",
+    element: (
+      <>
+        <AuthSuccess/>
       </>
     ),
   },
@@ -84,9 +94,9 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <>
-      <RouterProvider router={router} />
-    </>
+   
+      <RouterProvider router={router} />   
+    
   );
 };
 export default App;

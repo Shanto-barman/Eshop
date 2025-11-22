@@ -127,6 +127,7 @@ const Profile = () => {
                   <form
                     onSubmit={handleSubmit}
                     className="space-y-4 shadow-lg p-5 rounded-lg bg-white"
+                    
                   >
                     <div className="grid grid-cols-2 gap-4">
                       <div>

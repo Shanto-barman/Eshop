@@ -17,6 +17,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Google from "../../src/assets/google-logo.png"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -129,11 +130,15 @@ const Login = () => {
               "Login"
             )}
           </Button>
+          <Button onClick={()=>window.open("http://localhost:8000/auth/google", "_self")} className='w-full' variant='outline'>
+            <img src={Google} alt="" className="w-5" />
+            Login with Google
+            </Button>
           <p className="text-gray-700 text-sm">
             {" "}
             Don't have an account?{" "}
             <Link
-              to={"/singup"}
+              to={"/Signup"}
               className="hover:underline cursor-pointer text-pink-800"
             >
               Signup

@@ -7,14 +7,17 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
+import { UserProvider } from "./context/userContext";
 
-let persistor = persistStore(store)
+let persistor = persistStore(store);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <App />
+     <UserProvider>
+          <App />
+       </UserProvider>
         <Toaster />
       </PersistGate>
     </Provider>
