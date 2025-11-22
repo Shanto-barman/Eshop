@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     },
     token:{type:String, default:null},
     isVerified:{type:Boolean, default:false},
-    isLoggedIn:{type:String, default:null},
+    isLoggedIn:{type:Boolean, default:false},
     otp:{type:String, default:null},
     otpExpiry:{type:String, default:null},
     address:{type:String},
